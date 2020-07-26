@@ -17,7 +17,18 @@ export const Container = styled(Layout)`
 	}
 
 	.ant-layout-footer {
-		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		p {
+			margin-right: 1rem;
+			margin-bottom: 0;
+		}
+
+		img {
+			width: 8rem;
+		}
 	}
 `;
 

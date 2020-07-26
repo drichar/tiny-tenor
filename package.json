@@ -8,9 +8,11 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.4.3",
+    "axios": "^0.19.2",
     "craco-antd": "^1.18.1",
     "craco-less": "^1.17.0",
     "react": "^16.13.1",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
     "styled-components": "^5.1.1"
