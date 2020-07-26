@@ -38,13 +38,17 @@ function App() {
 		}
 	}, [searchText]);
 
-  const { Header, Content, Footer } = Layout;
+	const { Header, Content, Footer } = Layout;
 
 	return (
-    <Container>
+		<Container>
 			<Header>
 				<Logo>Tiny Tenor</Logo>
-				<Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+				<Menu
+					theme="dark"
+					mode="horizontal"
+					defaultSelectedKeys={['1']}
+				>
 					<Menu.Item key="1">Search</Menu.Item>
 				</Menu>
 			</Header>
@@ -58,10 +62,13 @@ function App() {
 			</Content>
 			<Footer>
 				<p>Built by Doug Richar</p>
-				<img src="//www.gstatic.com/tenor/web/attribution/PB_tenor_logo_blue_horizontal.svg" alt="powered by Tenor" />
+				<img
+					src="//www.gstatic.com/tenor/web/attribution/PB_tenor_logo_blue_horizontal.svg"
+					alt="powered by Tenor"
+				/>
 			</Footer>
 		</Container>
-  );
+	);
 }
 
 export default App;
