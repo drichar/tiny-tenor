@@ -8,12 +8,12 @@ export const Container = styled(Layout)`
 		display: flex;
 		justify-content: flex-start;
 		height: 4rem;
-    padding: 0 3rem;
+    padding: 0 1.5rem;
     line-height: 4rem;
 	}
 
 	.ant-layout-content {
-		padding: 0 3rem;
+		padding: 0;
 	}
 
 	.ant-layout-footer {
@@ -28,6 +28,16 @@ export const Container = styled(Layout)`
 
 		img {
 			width: 8rem;
+		}
+	}
+
+	@media (min-width: 40em) {
+		.ant-layout-header {
+			padding: 0 3rem;
+		}
+
+		.ant-layout-content {
+			padding: 0 3rem;
 		}
 	}
 `;

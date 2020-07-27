@@ -1,39 +1,59 @@
 import React from 'react';
-import { message } from 'antd';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { Spin, message } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import {
 	ResultsGrid,
-	ResultItem
+	ResultItem,
+	SpinnerContainer
 } from './List.css'
 
 function List(props) {
-	const { results } = props;
+	const { results, isLoading, onLoadMore, hasMore } = props;
 
-	if (!results || results.length === 0) {
-		return <p>No results.</p>
-	}
+	const loader = (
+		<SpinnerContainer>
+			<Spin size="large" />
+		</SpinnerContainer>
+	);
 
 	const handleCopyUrl = () => {
 		message.info('Copied to clipboard!');
 	};
 
+	if (isLoading) {
+		return loader;
+	}
+
+	if (!results || results.length === 0) {
+		return <p>No results.</p>
+	}
+
 	return (
-		<ResultsGrid>
-			{results.map((result) => (
-				<ResultItem key={result.id}>
+		<InfiniteScroll
+			dataLength={results.length}
+			next={() => onLoadMore()}
+			hasMore={hasMore}
+			loader={loader}
+		>
+			<ResultsGrid>
+				{results.map((result) => (
 					<CopyToClipboard
+						key={`${result.id}-${Date.now()}`}
 						text={result.media[0].tinygif.url}
 						onCopy={handleCopyUrl}
 					>
-						<img
-							src={result.media[0].tinygif.url}
-							alt={`${result.title} ${result.tags.join(', ')}`}
-						/>
+						<ResultItem key={result.id}>
+							<img
+								src={result.media[0].tinygif.url}
+								alt={`${result.title} ${result.tags.join(', ')}`}
+							/>
+						</ResultItem>
 					</CopyToClipboard>
-				</ResultItem>
-			))}
-		</ResultsGrid>
+				))}
+			</ResultsGrid>
+		</InfiniteScroll>
 	)
 };
 

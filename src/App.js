@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, BackTop } from 'antd';
 import SearchForm from './components/SearchForm';
 import List from './components/List';
-import withListLoading from './components/withListLoading';
 import './App.less';
 
 import {
@@ -13,30 +12,73 @@ import {
 } from './App.css';
 
 function App() {
-	const ListLoading = withListLoading(List);
-
 	const [searchText, setSearchText] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [results, setResults] = useState(null);
+	const [nextPosition, setNextPosition] = useState(0);
+	const [hasMore, setHasMore] = useState(true);
 
 	useEffect(() => {
 		if( searchText.length > 0 ) {
+			// reset hasMore
+			setHasMore(true);
+
 			setIsLoading(true);
 
-			let params = new URLSearchParams();
-			params.append('q', searchText);
-			params.append('key', process.env.REACT_APP_TENOR_API_KEY);
-			params.append('limit', 20);
-
-			const apiUrl = `https://api.tenor.com/v1/search?${params}`;
+			const apiUrl = getApiUrl(searchText);
 
 			axios.get(apiUrl)
-				.then((response) => {
-					setResults(response.data.results);
+				.then(({ data }) => {
+					setResults(data.results);
+
+					handleNext(data.next);
+
 					setIsLoading(false);
 				});
 		}
+		else {
+			setResults([]);
+		}
 	}, [searchText]);
+
+	const handleLoadMore = () => {
+		const apiUrl = getApiUrl(searchText, nextPosition);
+
+		axios.get(apiUrl)
+			.then(({ data }) => {
+				setResults([
+					...results,
+					...data.results
+				]);
+
+				handleNext(data.next);
+
+				setIsLoading(false);
+			});
+	};
+
+	const getApiUrl = (searchText, pos) => {
+		let params = new URLSearchParams();
+		params.append('q', searchText);
+		params.append('key', process.env.REACT_APP_TENOR_API_KEY);
+		params.append('limit', 20);
+		params.append('media_filter', 'minimal');
+
+		if (pos) {
+			params.append('pos', pos);
+		}
+
+		return `https://api.tenor.com/v1/search?${params}`;
+	};
+
+	const handleNext = (next) => {
+		if (next) {
+			setNextPosition(next);
+		}
+		else {
+			setHasMore(false);
+		}
+	};
 
 	const { Header, Content, Footer } = Layout;
 
@@ -55,8 +97,14 @@ function App() {
 			<Content>
 				<PageContainer>
 					<SearchForm onSearch={(searchText) => setSearchText(searchText)} />
+
 					{searchText.length > 0 && (
-						<ListLoading isLoading={isLoading} results={results} />
+						<List
+							isLoading={isLoading}
+							results={results}
+							onLoadMore={handleLoadMore}
+							hasMore={hasMore}
+						/>
 					)}
 				</PageContainer>
 			</Content>
@@ -67,6 +115,7 @@ function App() {
 					alt="powered by Tenor"
 				/>
 			</Footer>
+			<BackTop />
 		</Container>
 	);
 }
