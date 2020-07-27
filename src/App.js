@@ -31,7 +31,7 @@ function App() {
 				.then(({ data }) => {
 					setResults(data.results);
 
-					handleNext(data.next);
+					handleNextResults(data.next);
 
 					setIsLoading(false);
 				});
@@ -46,12 +46,15 @@ function App() {
 
 		axios.get(apiUrl)
 			.then(({ data }) => {
+				const resultsIds = results.map((r) => r.id);
+				const filteredNewResults = data.results.filter((r) => !resultsIds.includes(r.id));
+
 				setResults([
 					...results,
-					...data.results
+					...filteredNewResults
 				]);
 
-				handleNext(data.next);
+				handleNextResults(data.next);
 
 				setIsLoading(false);
 			});
@@ -71,7 +74,7 @@ function App() {
 		return `https://api.tenor.com/v1/search?${params}`;
 	};
 
-	const handleNext = (next) => {
+	const handleNextResults = (next) => {
 		if (next) {
 			setNextPosition(next);
 		}

@@ -8,11 +8,12 @@ export const ResultsGrid = styled.div`
 
 export const ResultItem = styled.div`
 	margin: 0 1.5rem 1.5rem 0;
-	width: 220px;
-	cursor: pointer;
+	width: ${({ imgWidth }) => `${imgWidth}px`};
+	height: ${({ imgHeight }) => `${imgHeight}px`};
 
 	img {
 		max-width: 100%;
+		cursor: pointer;
 	}
 `;
 

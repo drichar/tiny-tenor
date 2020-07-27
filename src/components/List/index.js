@@ -40,14 +40,19 @@ function List(props) {
 			<ResultsGrid>
 				{results.map((result) => (
 					<CopyToClipboard
-						key={`${result.id}-${Date.now()}`}
+						key={result.id}
 						text={result.media[0].tinygif.url}
 						onCopy={handleCopyUrl}
 					>
-						<ResultItem key={result.id}>
+						<ResultItem
+							imgWidth={result.media[0].tinygif.dims[0]}
+							imgHeight={result.media[0].tinygif.dims[1]}
+						>
 							<img
 								src={result.media[0].tinygif.url}
-								alt={`${result.title} ${result.tags.join(', ')}`}
+								width={result.media[0].tinygif.dims[0]}
+								height={result.media[0].tinygif.dims[1]}
+								alt={`${result.title}, ${result.tags.join(', ')}`}
 							/>
 						</ResultItem>
 					</CopyToClipboard>
